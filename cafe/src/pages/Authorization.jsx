@@ -130,29 +130,23 @@ function Authorization() {
         xhr.onreadystatechange = function () {
         if (xhr.status === 201) {
             window.location.href = '/login'
-        } else { 
+        } else if (xhr.status === 400){ 
+            let emailInput = document.getElementById('authorization-field-email');
+            let emailText = document.getElementById('authorization-p-email');
+            UnvalidateInput(emailInput, emailText, 'Уже зарегистрирован');
+
+            
+        } else {
             event.preventDefault();
             event.stopPropagation();
             console.log('Error');
         }
+        
         }
 
         var data = JSON.stringify({ "username": username, "email": email, "password": password, "phone_number": phone_number, "birthdate": birthdate, "role_id": 0});
 
         xhr.send(data);
-
-
-        // fetch(url, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ name, telephone, email, birthday, password }),
-        // })
-        //     .then(response => {
-        //         window.location.href = '/login';
-        //         return response.text();
-        //     })
     }
 
     return (

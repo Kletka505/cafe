@@ -8,9 +8,10 @@
             display: block
             overflow: hidden
             border-bottom: 3px dotted black
-            margin-top: -12px
+            margin-top: -1.2rem
             @include respond(tab-port)
                 border-bottom: 2px dotted black
+                margin-top: -2rem
             @include respond(phone)
                 margin-top: -3rem
     &__text
@@ -25,8 +26,8 @@
             content: ""
             display: inline-block
             width: .25em
-    &__text &__price
+    &__text, &__price
         @include respond(tab-port)
             font-size: 3rem
         @include respond(phone)
-            font-size: 1.5rem
+            font-size: 2rem

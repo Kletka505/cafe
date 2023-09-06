@@ -49,9 +49,6 @@ function Login() {
                     </Link>
                 </div>
                 <button className='login-button' onClick={LoginUser}>
-                    {/* <Link to='/login/error' className="login-button__link">
-                    ВОЙТИ
-                </Link> */}
                     ВОЙТИ
                 </button>
 

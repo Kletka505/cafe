@@ -4,10 +4,17 @@ from fastapi import Depends, Request, Response
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, models, schemas
 from fastapi.templating import Jinja2Templates
 from server_python.database import User, get_user_db
+import smtplib
+from email.message import EmailMessage
+from ssl import create_default_context
+from email.mime.text import MIMEText
+from smtplib import SMTP
+
 
 SECRET = "SECRET"
 
 templates = Jinja2Templates(directory="templates")
+
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     reset_password_token_secret = SECRET
@@ -15,6 +22,15 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
+    async def on_after_forgot_password(self, user: User, token: str, request: Optional[Request] = None):
+        smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+        smtpObj.starttls()
+        smtpObj.login('ilja.bazhanov@gmail.com','nvoyazrqlhrclksk')
+
+        smtpObj.sendmail("ilja.bazhanov@gmail.com", user.email, token)
+        print(user.email, token)
+    async def on_after_reset_password(self, user: User, request: Optional[Request] = None):
+        print(f"User {user.id} has reset their password.")
     async def on_after_login(
         self,
         user: User,
@@ -23,7 +39,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
     ):
         print('after')
-        # templates.TemplateResponse("index.html", {"request": request})
 
     async def create(
         self,
@@ -51,6 +66,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         await self.on_after_register(created_user, request)
 
         return created_user
+    
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
